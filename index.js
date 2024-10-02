@@ -59,6 +59,23 @@ const client = new MongoClient(uri, {
         res.status(500).json({ message: "Failed to fetch blog", error });
       }
     });
+    // Delete Blog Post by ID
+app.delete("/blogs/:id", async (req, res) => {
+  try {
+    const { id } = req.params; // Get the ID from the URL parameters
+    const result = await blogCollection.deleteOne({ _id: new ObjectId(id) }); // Delete the blog using the ID
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "Blog not found" }); // Handle case where blog is not found
+    }
+
+    res.status(200).json({ message: "Blog deleted successfully" }); // Success response
+  } catch (error) {
+    res.status(500).json({ message: "Failed to delete blog", error });
+  }
+});
+
+
 
 
 
