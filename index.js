@@ -98,6 +98,18 @@ async function run() {
           const result = await blogCollection.updateOne(filter, item, options);
           res.send(result);
         });
+
+        // Insert New Blog
+        app.post('/blogs', async (req, res) => {
+          const newBlog = req.body;
+          try {
+            const result = await blogCollection.insertOne(newBlog);
+            res.status(201).json({ insertedId: result.insertedId });
+          } catch (error) {
+            console.error('Error adding blog:', error);
+            res.status(500).json({ message: 'Error adding blog' });
+          }
+        });
     
 
         await client.db("admin").command({ ping: 1 });
